@@ -102,6 +102,15 @@ define [
       options
 
 
+    forceNavigate: (newPath) ->
+      if @history
+        @widgetRepo.resetSmartTransition()
+        @process(newPath)
+        history.pushState({}, document.title, @currentPath) if not @options.shim
+      else
+        window.location.href = newPath
+
+
     _initHistoryNavigate: ->
       ###
       Setups client-side navigating event handlers.
@@ -111,7 +120,10 @@ define [
         @process(newPath) unless newPath == @currentPath
 
       self = this
-      $(document).on 'click', 'a:not([data-bypass],[target="_blank"])', (event) ->
+
+      # Read more: http://perfectionkills.com/detecting-event-support-without-browser-sniffing/
+      clickEventType = if 'ontouchstart' of document.documentElement then 'touchstart' else 'click'
+      $(document).on clickEventType, 'a:not([data-bypass],[target="_blank"])', (event) ->
         # Default behaviour for anchors if any modification key pressed
         return if event.metaKey or event.ctrlKey or event.altKey or event.shiftKey
 
