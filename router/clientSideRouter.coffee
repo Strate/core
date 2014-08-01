@@ -25,7 +25,9 @@ define [
       @options = $.extend({}, @options, options)
 
       if (@options.history)
-        @history = @historySupport && @options.history
+# TODO: PHONEGAP
+#        @history = @historySupport && @options.history
+        @history = true
 
       # save current path
       @currentPath = @getActualPath()
@@ -106,7 +108,8 @@ define [
       if @history
         @widgetRepo.resetSmartTransition()
         @process(newPath)
-        history.pushState({}, document.title, @currentPath) if not @options.shim
+# TODO: PHONEGAP
+#        history.pushState({}, document.title, @currentPath) if not @options.shim
       else
         window.location.href = newPath
 

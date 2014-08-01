@@ -143,12 +143,9 @@ define [
             @storeTokens grantedAccessToken, grantedRefreshToken, callback
             return true #continue processing other deferred callbacks in oauth
           else
-            #in case of fail dont call callback - it wont be able to solve the problem,
+            #in case of fail don't call callback - it wont be able to solve the problem,
             #but might run into everlasting loop
-            if !silently
-              @authenticateUser().done(callback).fail (message) ->
-                console.error(message)
-
+            @authenticateUser().done(callback).failAloud() if not silently
             return false #stop processing other deferred callbacks in oauth
 
 
@@ -159,9 +156,7 @@ define [
         else
           #in case of fail dont call callback - it wont be able to solve the problem,
           #but might run into everlasting loop
-          @authenticateUser().done(callback).fail (message) ->
-            console.error(message)
-            
+          @authenticateUser().done(callback).failAloud()
       else
         callback accessToken, refreshToken
 

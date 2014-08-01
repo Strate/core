@@ -5,9 +5,13 @@ define [
 
   class BrowserCookie
 
-    get: (name, defaultValue) =>
-      value = $.cookie name
-      value ?= defaultValue
+# TODO: PHONEGAP
+    cookies: {}
+
+
+    get: (name, defaultValue) ->
+      @cookies[name] ? $.cookie(name) ? defaultValue
+
 
     set: (name, value, params) =>
       _params =
@@ -15,6 +19,7 @@ define [
 
       _params = _.extend _params, params if params
 
-      $.cookie name, value, _params
+      @cookies[name] = value
+      $.cookie(name, value, _params)
 
       true
